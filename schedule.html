@@ -25,14 +25,26 @@ const saud={name:'سعود الشريف',rows:[
 ]};
 const zyad={name:'زياد عسيري',rows:[
 ['الأحد','رابع<br>علوم','','ثالث ثانوي<br>علم أرض','فسحة','أول متوسط<br>علوم','ثاني ثانوي<br>أحياء','','خامس<br>علوم','sun','day-sun'],
-['الإثنين','رابع<br>علوم','','أول متوسط<br>علوم','فسحة','', 'ثالث ثانوي<br>علم أرض','','أول ثانوي<br>أحياء','mon','day-mon'],
+['الإثنين','رابع<br>علوم','','أول متوسط<br>علوم','فسحة','','ثالث ثانوي<br>علم أرض','','أول ثانوي<br>أحياء','mon','day-mon'],
 ['الثلاثاء','','ثالث ثانوي<br>علم أرض','رابع<br>علوم','فسحة','خامس<br>علوم','ثاني ثانوي<br>أحياء','','أول متوسط<br>علوم','tue','day-tue'],
 ['الأربعاء','خامس<br>علوم','أول ثانوي<br>أحياء','','فسحة','','ثاني ثانوي<br>أحياء','رابع<br>علوم','','wed','day-wed'],
 ['الخميس','','ثاني ثانوي<br>أحياء','','فسحة','أول ثانوي<br>أحياء','خامس<br>علوم','','أول متوسط<br>علوم','thu','day-thu']
 ]};
 const periods=[['الحصة الأولى','7:00 - 7:45','h1'],['الحصة الثانية','7:45 - 8:30','h2'],['الحصة الثالثة','8:30 - 9:30','h3'],['فسحة','15 دقيقة','break'],['الحصة الرابعة','9:30 - 10:15','h4'],['الحصة الخامسة','10:15 - 11:00','h5'],['الحصة السادسة','11:00 - 11:45','h6'],['الحصة السابعة','11:45 - 12:30','h7']];
 function cell(cls,html,head=false){const d=document.createElement('div');d.className='cell '+(head?'head ':'')+cls;d.innerHTML=html||'';return d}
-function render(data){document.getElementById('teacher').textContent=data.name;const s=document.getElementById('schedule');s.innerHTML='';s.appendChild(cell('time','توقيت<br>الحصص',true));periods.forEach(p=>s.appendChild(cell(p[2],p[0]+'<br><small>'+p[1]+'</small>',true)));data.rows.forEach(r=>{s.appendChild(cell(r[10],r[0]));for(let i=1;i<=8;i++)s.appendChild(cell(r[i-1]||'',r[i-1]||'')||'');});}
+function render(data){
+ document.getElementById('teacher').textContent=data.name;
+ const s=document.getElementById('schedule');s.innerHTML='';
+ s.appendChild(cell('time','توقيت<br>الحصص',true));
+ periods.forEach(p=>s.appendChild(cell(p[2],p[0]+'<br><small>'+p[1]+'</small>',true)));
+ data.rows.forEach(r=>{
+  s.appendChild(cell(r[10],r[0]));
+  for(let i=1;i<=8;i++){
+   const cls=i===4?'break':r[9];
+   s.appendChild(cell(cls,r[i]||''));
+  }
+ });
+}
 const isZyad=new URLSearchParams(location.search).get('teacher')==='zyad';
 render(isZyad?zyad:saud);
 </script>
